@@ -46,13 +46,17 @@ class OsciloscopeData{
         bitRectangles = new ArrayList<>();
         chartData = new ArrayList<>();
         readData();
+        countBitInterval();
 
         if(isCANMessageInData){
-            countBitInterval();
             findCANMessage();
             findMessageBits();
-            find_Y_MaxMinValues();
-            find_Y_AverageMinMax();
+            find_Y_MaxMinValues(frameSamples);
+            find_Y_AverageMinMax(frameSamples);
+        }
+        else {
+            find_Y_MaxMinValues(samples);
+            find_Y_AverageMinMax(samples);
         }
 
         find_X_MinMax();
@@ -178,11 +182,11 @@ class OsciloscopeData{
         }
     }
 
-    private void find_Y_MaxMinValues(){
+    private void find_Y_MaxMinValues(List<Sample> samples){
         Double min = Double.MAX_VALUE;
         Double max = Double.MIN_VALUE;
 
-        for (Sample sample : frameSamples){
+        for (Sample sample : samples){
             if(sample.getValue() > max){
                 max = sample.getValue();
             }
@@ -194,7 +198,7 @@ class OsciloscopeData{
         sampleMinValue = min;
     }
 
-    private void find_Y_AverageMinMax(){
+    private void find_Y_AverageMinMax(List<Sample> samples){
         boolean beginningFound = false;
         Double maxSum = 0d;
         Double minSum = 0d;
@@ -202,20 +206,20 @@ class OsciloscopeData{
         Integer maxSumItems = 0;
         Integer minSumItems = 0;
 
-        for(int i = 0; i < frameSamples.size() - bitInterval * (ACK_POS_FROM_END + 2); i++) {
+        for(int i = 0; i < samples.size() - bitInterval * (ACK_POS_FROM_END + 2); i++) {
             Double sum = 0d;
 
 
-            if(!beginningFound && Math.abs(frameSamples.get(i).getValue()) >= 1.5){
+            if(!beginningFound && Math.abs(samples.get(i).getValue()) >= 1.5){
                 beginningFound = true;
                 i += bitInterval * 5;
             }
 
             if(beginningFound){
                 double average = 0;
-                if((i + bitInterval) < frameSamples.size()){
+                if((i + bitInterval) < samples.size()){
                     for(int j = i; j < i + bitInterval; j++){
-                        sum += frameSamples.get(j).getValue();
+                        sum += samples.get(j).getValue();
                     }
                     average = sum/bitInterval;
 
@@ -255,7 +259,7 @@ class OsciloscopeData{
         }
         else{
             minX = samples.get(0).getTime();
-            maxX = samples.get(frameSamples.size() - 1).getTime();
+            maxX = samples.get(samples.size() - 1).getTime();
         }
     }
 

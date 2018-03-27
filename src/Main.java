@@ -28,7 +28,6 @@ public class Main extends Application{
 
         for(File file : files){
 
-
             long startTime = System.nanoTime();
             OsciloscopeData osciloscopeData = new OsciloscopeData(file.getPath());
 
@@ -100,19 +99,21 @@ public class Main extends Application{
         peakMinValueSeries.getData().add(new XYChart.Data(osciloscopeData.getMaxX(), osciloscopeData.getSampleMinValue()));
 
         double MARGIN = 0.1;
-        Rectangle2D.Double idRectangle = new Rectangle2D.Double(osciloscopeData.getFirstXValueIDMessage(), osciloscopeData.getSampleMinValue() - MARGIN,
-                osciloscopeData.getLastXValueIDMessage() - osciloscopeData.getFirstXValueIDMessage(),
-                osciloscopeData.getSampleMaxValue() - osciloscopeData.getSampleMinValue() + MARGIN);
 
+        if(osciloscopeData.isCANMessageInData()){
+            Rectangle2D.Double idRectangle = new Rectangle2D.Double(osciloscopeData.getFirstXValueIDMessage(), osciloscopeData.getSampleMinValue() - MARGIN,
+                    osciloscopeData.getLastXValueIDMessage() - osciloscopeData.getFirstXValueIDMessage(),
+                    osciloscopeData.getSampleMaxValue() - osciloscopeData.getSampleMinValue() + MARGIN);
 
-        idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMinX(), idRectangle.getMaxY()));
-        idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMaxX(), idRectangle.getMaxY()));
-        idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMaxX(), idRectangle.getMinY()));
-        idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMinX(), idRectangle.getMinY()));
-        idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMinX(), idRectangle.getMinY()));
-        idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMinX(), idRectangle.getMaxY()));
-        idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMaxX(), idRectangle.getMaxY()));
-        idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMaxX(), idRectangle.getMinY()));
+            idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMinX(), idRectangle.getMaxY()));
+            idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMaxX(), idRectangle.getMaxY()));
+            idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMaxX(), idRectangle.getMinY()));
+            idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMinX(), idRectangle.getMinY()));
+            idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMinX(), idRectangle.getMinY()));
+            idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMinX(), idRectangle.getMaxY()));
+            idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMaxX(), idRectangle.getMaxY()));
+            idRectangleSeries.getData().add(new XYChart.Data(idRectangle.getMaxX(), idRectangle.getMinY()));
+        }
     }
 
     private void setupMarkersSeriesNames(OsciloscopeData osciloscopeData, XYChart.Series averageMaxValueSeries, XYChart.Series averageMinValueSeries,
