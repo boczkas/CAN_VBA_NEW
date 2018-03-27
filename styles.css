@@ -1,0 +1,17 @@
+.chart {
+    -fx-padding: 10px;
+}
+.chart-content {
+    -fx-padding: 30px;
+}
+.chart-plot-background {
+    -fx-background-color: black;
+}
+.chart-title {
+  -fx-text-fill: #4682b4;
+  -fx-font-size: 2em;
+  -fx-font-weight: bold;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #7CFC00; }
+.default-color0.chart-line-symbol { -fx-background-color: #7CFC00, white; }
